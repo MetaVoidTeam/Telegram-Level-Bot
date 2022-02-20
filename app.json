@@ -1,0 +1,28 @@
+{
+    "name": "Senko",
+    "description": "Senko Welcome Bot",
+    "repository": "https://github.com/MoeZilla/senko-telegram-bot",
+    "env": {
+        "BOT_TOKEN": {
+            "description": "telegram bot token here",
+            "required": true
+        },
+        "API_ID": {
+            "description": "telegram api id here",
+            "required": true
+        },
+        "API_HASH": {
+            "description": "telegram api hash here",
+            "required": true
+        },
+        "MONGO_URL": {
+            "description": "mongo db url",
+            "required": true
+        }
+    },
+    "addons": [
+        {
+            "plan": "heroku-postgresql"
+        }
+    ]
+}
