@@ -1,7 +1,6 @@
 """
 MIT License
 Copyright (C) 2021-2022 Moezilla
-This file is part of @BlueMoonVampireBot (Antispam Telegram Bot)
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -44,6 +43,11 @@ async def is_admins(chat_id: int):
             chat_id, filter="administrators"
         )
     ]
+
+levellink =["https://telegra.ph/file/6620fe683ff3989268c7f.mp4", "https://telegra.ph/file/c6bbce91cb75d4ab318ae.mp4", "https://telegra.ph/file/c2ac7b63d248f49da952c.mp4", "https://telegra.ph/file/b100466a5f0c42fa7255f.mp4", "https://telegra.ph/file/67c9dc7b59f78aa7aaf4c.mp4", "https://telegra.ph/file/06e2d74343e89c9d3cd12.mp4", "https://telegra.ph/file/88458a18eea8e86292b14.mp4", "https://telegra.ph/file/e3786d4f321ff4335a70f.mp4"]
+levelname = ["Team Rocket", "Stray God", "Vector", "Hero Association", "Z Warrior", "Black Knight", "Ghoul", "Overlord"]
+levelnum = [2,5,15,25,35,50,70,100]
+
 
 
 @bot.on_message(
@@ -111,7 +115,13 @@ async def level(client, message):
                 xp -= ((50*((l-1)**2))+(50*(l-1)))
                 if xp == 0:
                     await message.reply_text(f"🌟 {message.from_user.mention}, You have reached level {l}**, Nothing can stop you on your way!")
-                    
+    
+                    for lv in range(len(levelname)) and range(len(levellink)):
+                            if l == levelnum[lv]:            
+                                Link = f"{levellink[lv]}"
+                                await message.reply_video(video=Link, caption=f"{message.from_user.mention}, You have reached Rank Name **{levelname[lv]}**")
+                  
+
                                
 @bot.on_message(
     filters.command("rank", prefixes=["/", ".", "?", "-"])
