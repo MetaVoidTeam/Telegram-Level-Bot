@@ -28,6 +28,8 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN")
 MONGO_URL = os.environ.get("MONGO_URL")
 
 
+talk_channels = [-1001714479526, -100162516728]
+
 
 bot = Client(
     "Level" ,
