@@ -28,7 +28,7 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN")
 MONGO_URL = os.environ.get("MONGO_URL")
 
 
-talk_channels = [-1001714479526, -100162516728]
+talk_channels = [-1001714479526, -1001714474526]
 
 
 bot = Client(
@@ -38,43 +38,13 @@ bot = Client(
     bot_token = BOT_TOKEN
 )
 
-async def is_admins(chat_id: int):
-    return [
-        member.user.id
-        async for member in bot.iter_chat_members(
-            chat_id, filter="administrators"
-        )
-    ]
+
 
 levellink =["https://telegra.ph/file/6620fe683ff3989268c7f.mp4", "https://telegra.ph/file/c6bbce91cb75d4ab318ae.mp4", "https://telegra.ph/file/c2ac7b63d248f49da952c.mp4", "https://telegra.ph/file/b100466a5f0c42fa7255f.mp4", "https://telegra.ph/file/67c9dc7b59f78aa7aaf4c.mp4", "https://telegra.ph/file/06e2d74343e89c9d3cd12.mp4", "https://telegra.ph/file/88458a18eea8e86292b14.mp4", "https://telegra.ph/file/e3786d4f321ff4335a70f.mp4"]
 levelname = ["Team Rocket", "Stray God", "Vector", "Hero Association", "Z Warrior", "Black Knight", "Ghoul", "Overlord"]
 levelnum = [2,5,15,25,35,50,70,100]
 
 
-
-@bot.on_message(
-    filters.command("level", prefixes=["/", ".", "?", "-"])
-    & ~filters.private)
-async def levelsystem(_, message): 
-    leveldb = MongoClient(MONGO_URL)
-   
-    toggle = leveldb["ToggleDb"]["Toggle"] 
-    if message.from_user:
-        user = message.from_user.id
-        chat_id = message.chat.id
-        if user not in (
-            await is_admins(chat_id)
-        ):
-            return await message.reply_text(
-                "You are not admin"
-            )
-    is_level = toggle.find_one({"chat_id": message.chat.id})
-    if not is_level:
-        toggle.insert_one({"chat_id": message.chat.id})
-        await message.reply_text("Level System Enable")
-    else:
-        toggle.delete_one({"chat_id": message.chat.id})
-        await message.reply_text("Level System Disable")
 
 
 @bot.on_message(
@@ -94,20 +64,18 @@ async def level(client, message):
     leveldb = MongoClient(MONGO_URL)
     
     level = leveldb["LevelDb"]["Level"] 
-    toggle = leveldb["ToggleDb"]["Toggle"] 
-
-    is_level = toggle.find_one({"chat_id": message.chat.id})
-    if is_level:
-        xpnum = level.find_one({"level": user_id, "chatid": chat})
+ 
+    if message.chat.id in Chat_Group:
+        xpnum = level.find_one({"level": user_id})
 
         if not message.from_user.is_bot:
             if xpnum is None:
-                newxp = {"level": user_id, "chatid": chat, "xp": 10}
+                newxp = {"level": user_id, "xp": 10}
                 level.insert_one(newxp)   
                     
             else:
                 xp = xpnum["xp"] + 10
-                level.update_one({"level": user_id, "chatid": chat}, {
+                level.update_one({"level": user_id}, {
                     "$set": {"xp": xp}})
                 l = 0
                 while True:
@@ -135,11 +103,9 @@ async def rank(client, message):
     leveldb = MongoClient(MONGO_URL)
     
     level = leveldb["LevelDb"]["Level"] 
-    toggle = leveldb["ToggleDb"]["Toggle"] 
-
-    is_level = toggle.find_one({"chat_id": message.chat.id})
-    if is_level:
-        xpnum = level.find_one({"level": user_id, "chatid": chat})
+    
+    if message.chat.id in Chat_Group:
+        xpnum = level.find_one({"level": user_id})
         xp = xpnum["xp"]
         l = 0
         r = 0
